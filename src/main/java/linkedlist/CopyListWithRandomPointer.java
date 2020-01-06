@@ -1,5 +1,10 @@
 package linkedlist;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.
 
@@ -57,6 +62,57 @@ public class CopyListWithRandomPointer {
 
 
     public static Node copyRandomList(Node head) {
-        return null;
+        if(head == null){
+            return null;
+        }
+        Map<Node, Node> randoms = new HashMap<>();
+
+        Node deepCopy = new Node(head.val);
+        randoms.put(head, deepCopy);
+
+        Node newHead = deepCopy;
+
+        if(head.random != null) {
+            // TODO: add
+            deepCopy.random = new Node(head.random.val);
+            randoms.put(head.random, deepCopy.random);
+        }
+
+        head = head.next;
+        while(head != null){
+            deepCopy.next = new Node(head.val);
+            if(head.random != null) {
+
+            }
+
+            deepCopy = deepCopy.next;
+            head = head.next;
+        }
+
+        return newHead;
+    }
+
+    public static void main(String[] args){
+        // [[7,null],[13,0],[11,4],[10,2],[1,0]]
+
+        Node first = new Node(7);
+        Node second = new Node(13);
+        Node third = new Node(11);
+        Node fourth = new Node(10);
+        Node fifth = new Node(1);
+
+        first.next = second;
+        first.random = null;
+        second.next = third;
+        second.random = first;
+        third.next = fourth;
+        third.random = fifth;
+        fourth.next = fifth;
+        fourth.random = third;
+        fifth.random = first;
+
+        Node deepCopy = copyRandomList(first);
+        System.out.println("Finished");
+
     }
 }
