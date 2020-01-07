@@ -1,9 +1,6 @@
 package linkedlist;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.
@@ -48,6 +45,8 @@ import java.util.Map;
  */
 public class CopyListWithRandomPointer {
 
+    private static final Map<Node, Node> copiedRandoms = new HashMap<>();
+
     static class Node {
         int val;
         Node next;
@@ -60,36 +59,39 @@ public class CopyListWithRandomPointer {
         }
     }
 
-
     public static Node copyRandomList(Node head) {
-        if(head == null){
-            return null;
-        }
-        Map<Node, Node> randoms = new HashMap<>();
+        if(head == null) return null;
 
-        Node deepCopy = new Node(head.val);
-        randoms.put(head, deepCopy);
+        Node resultHead = new Node(0);
+        Node result = resultHead;
 
-        Node newHead = deepCopy;
-
-        if(head.random != null) {
-            // TODO: add
-            deepCopy.random = new Node(head.random.val);
-            randoms.put(head.random, deepCopy.random);
-        }
-
-        head = head.next;
-        while(head != null){
-            deepCopy.next = new Node(head.val);
-            if(head.random != null) {
-
+        Map<Node, Node> nodeMap = new HashMap<>();
+        while(head != null) {
+            Node node = null;
+            if(nodeMap.containsKey(head)) {
+                node = nodeMap.get(head);
+            } else {
+                node = new Node(head.val);
+                nodeMap.put(head, node);
             }
 
-            deepCopy = deepCopy.next;
+            Node rand = null;
+            if(head.random != null) {
+                if(nodeMap.containsKey(head.random)) {
+                    rand = nodeMap.get(head.random);
+                } else {
+                    rand = new Node(head.random.val);
+                    nodeMap.put(head.random, rand);
+                }
+            }
+
+            node.random = rand;
+            result.next = node;
+            result = result.next;
             head = head.next;
         }
 
-        return newHead;
+        return resultHead.next;
     }
 
     public static void main(String[] args){
