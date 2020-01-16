@@ -52,8 +52,6 @@ public class NumberOfIslands {
                     if (!countedBefore(i, j, grid)) {
                         nIslands++;
                         markCells(i, j, grid);
-                    } else {
-                        markCells(i, j, grid);
                     }
                 }
             }
