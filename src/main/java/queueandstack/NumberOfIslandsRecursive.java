@@ -1,8 +1,5 @@
 package queueandstack;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 /*
 Given a 2d grid map of '1's (land) and '0's (water), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
 
@@ -25,17 +22,7 @@ Input:
 
 Output: 3
  */
-public class NumberOfIslands {
-
-    static private class Coordinate {
-        private int row;
-        private int column;
-
-        Coordinate(int row, int column){
-            this.row = row;
-            this.column = column;
-        }
-    }
+public class NumberOfIslandsRecursive {
 
     public static int numIslands(char[][] grid) {
         if(grid == null || grid.length == 0){
@@ -81,27 +68,18 @@ public class NumberOfIslands {
     public static void markCells(int i, int j, char[][] grid){
         int nRows = grid.length;
         int nColumns = grid[0].length;
-
-        Queue<Coordinate> coordinates = new LinkedList<>();
-        coordinates.offer(new Coordinate(i,j));
-
-        while(!coordinates.isEmpty()) {
-            Coordinate coordinate = coordinates.poll();
-            int row = coordinate.row;
-            int column = coordinate.column;
-            grid[row][column] = '-';
-            if (row - 1 >= 0 && grid[row - 1][column] == '1') {
-                coordinates.offer(new Coordinate(row - 1, column));
-            }
-            if (row + 1 < nRows && grid[row + 1][column] == '1') {
-                coordinates.offer(new Coordinate(row + 1, column));
-            }
-            if (column - 1 >= 0 && grid[row][column - 1] == '1') {
-                coordinates.offer(new Coordinate(row, column - 1));
-            }
-            if (column + 1 < nColumns && grid[row][column + 1] == '1') {
-                coordinates.offer(new Coordinate(row, column + 1));
-            }
+        grid[i][j] = '-';
+        if(i-1 >= 0 && grid[i-1][j] == '1'){
+            markCells(i-1, j, grid);
+        }
+        if(i+1 < nRows && grid[i+1][j] == '1'){
+            markCells(i+1, j, grid);
+        }
+        if(j-1 >= 0 && grid[i][j-1] == '1'){
+            markCells(i, j-1, grid);
+        }
+        if(j+1 < nColumns && grid[i][j+1] == '1'){
+            markCells(i, j+1, grid);
         }
     }
 
